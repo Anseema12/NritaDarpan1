@@ -1,0 +1,1 @@
+const API_URL = "https://6a52425b78ecba6073e29234.mockapi.io/dances"
