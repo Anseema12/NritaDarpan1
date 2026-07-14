@@ -7,22 +7,27 @@
     <title>NrityaDarpan</title>
     <link rel="stylesheet" href="css/style.css">
 <body>
-<!--First I created the Serach bar-->
-     <div class="topnav">
+<!--First I created the Search bar-->
+     <div class="toolbar">
+        <div class="search-box"></div>
          <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="searchInput" placeholder="Search for dance forms..">
-    </div>
-        <select id="sortSelect">     <!--Here is the sort area-->
-            <option value=""> ⬍ Sort By</option>
+    
+        <div class="sort-wrapper"> <!--Here is the sort area-->
+
+        <i class="fa-solid fa-arrow-down-a-z"></i>
+        <select id="sortSelect">     
+            <option value=""> ⬍ Sort By </option>
             <option value="ascending">
                 Name (A-Z)
             </option>
             <option value="descending">
                 Name (Z-A)
             </option>
-        </select>      
+        </select> </div>
+           
         <section id="summaryBox"> <!--This is summary box which used reduce mthod of javascript-->
-</section>
+</section> </div>
     <!-- Heading area -->
     <div class="header-content">
         <img src="assets/logo.png" alt="NrityaDarpan logo" class="logo">
