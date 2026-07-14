@@ -1,8 +1,18 @@
 let allDanceForms = [];
 let selectedDanceId = "";
+let editingId = "";
 const summaryBox = document.getElementById("summaryBox");
 
 const cancelDelete = document.getElementById("cancelDelete");
+cancelDelete.addEventListener("click", function(){
+
+    console.log("Cancel Delete Clicked");
+
+    document
+        .getElementById("deleteModal")
+        .classList.add("hidden");
+
+});
 
 const confirmDelete = document.getElementById("confirmDelete");
 
@@ -53,6 +63,11 @@ function displayDanceList(dances){
                         View Details
                     </button>
 
+                    <button class="edit-button" onclick="editDance('${dance.id}')">
+                    <i class="fa-solid fa-pen"></i>
+                         Edit
+                    </button>
+
                     <button class="delete-button" onclick="openDeleteModal('${dance.id}')">
                      <i class="fa-solid fa-trash"></i>
                         Delete
@@ -84,6 +99,28 @@ function displaySummary(dances){
 function viewDetails(id) {
 
     window.location.href = `dance-details.html?id=${id}`;
+
+}
+function editDance(id){
+
+    editingId = id;
+
+    const dance = allDanceForms.find(function(item){
+
+        return item.id === id;
+
+    });
+
+    document.getElementById("danceName").value = dance.name;
+
+    document.getElementById("danceOrigin").value = dance.origin;
+
+    document.getElementById("danceImage").value = dance.thumbnail;
+
+    addDanceModal.classList.remove("hidden");
+
+    document.getElementById("saveButton").innerHTML =
+    `<i class="fa-solid fa-floppy-disk"></i> Update Dance`;
 
 }
 searchInput.addEventListener("keyup", function(){
@@ -131,10 +168,30 @@ sortSelect.addEventListener("change", function () {
 const addDanceForm = document.getElementById("addDanceForm");
 const addDanceModal = document.getElementById("addDanceModal");
 const addButton = document.getElementById("addButton");
+const cancelButton = document.getElementById("cancelButton");
 
 addButton.addEventListener("click", function () {
 
+     editingId = "";
+
+    addDanceForm.reset();
+
+    document.getElementById("saveButton").innerHTML =
+    `<i class="fa-solid fa-plus"></i> Save Dance`;
+
     addDanceModal.classList.remove("hidden");
+
+});
+cancelButton.addEventListener("click", function(){
+
+    addDanceModal.classList.add("hidden");
+
+    addDanceForm.reset();
+
+    editingId = "";
+
+    document.getElementById("saveButton").innerHTML =
+    `<i class="fa-solid fa-plus"></i> Save Dance`;
 
 });
 
@@ -168,6 +225,7 @@ addDanceForm.addEventListener("submit", function(event){
     difficulty: "Beginner",
     genres: []
 };
+if(editingId === ""){
 fetch(API_URL,{
 
     method:"POST",
@@ -200,24 +258,61 @@ fetch(API_URL,{
     console.log(error);
 
  })
+ }
+ else{
 
+    fetch(API_URL + "/" + editingId,{
 
+        method:"PUT",
+
+        headers:{
+
+            "Content-Type":"application/json"
+
+        },
+
+        body:JSON.stringify(newDance)
+
+    })
+
+    .then(function(response){
+
+        return response.json();
+
+    })
+
+    .then(function(){
+
+        alert("Dance Updated Successfully");
+
+        editingId = "";
+
+        document.getElementById("saveButton").innerHTML =
+        `<i class="fa-solid fa-plus"></i> Save Dance`;
+
+        addDanceModal.classList.add("hidden");
+
+        addDanceForm.reset();
+
+        location.reload();
+
+    })
+
+    .catch(function(error){
+
+        console.log(error);
+
+    });
+
+}
 });
 function openDeleteModal(id){
-    const modal = document.getElementById("deleteModal");
-    console.log(modal);
-    modal.classList.remove("hidden");
-    modal.style.display = "flex";
+     document
+        .getElementById("deleteModal")
+        .classList.remove("hidden");
     selectedDanceId = id;
 
 }
-cancelDelete.addEventListener("click", function(){
-
-    document
-        .getElementById("deleteModal")
-        .classList.add("hidden");
-
-});
 
 confirmDelete.addEventListener("click", function(){
     console.log("YES clicked");
